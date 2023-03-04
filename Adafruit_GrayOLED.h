@@ -24,6 +24,7 @@
 #ifndef _Adafruit_GRAYOLED_H_
 #define _Adafruit_GRAYOLED_H_
 
+#if defined __Adafruit_GFX_Include_Hardware__
 #if !defined(__AVR_ATtiny85__) // Not for ATtiny, at all
 
 #include <Adafruit_GFX.h>
@@ -97,4 +98,5 @@ private:
 };
 
 #endif // end __AVR_ATtiny85__
+#endif
 #endif // _Adafruit_GrayOLED_H_

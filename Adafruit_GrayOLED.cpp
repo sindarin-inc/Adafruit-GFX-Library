@@ -15,6 +15,7 @@
  *
  */
 
+#if __Adafruit_GFX_Include_Hardware__
 #if !defined(__AVR_ATtiny85__) // Not for ATtiny, at all
 
 #include "Adafruit_GrayOLED.h"
@@ -419,3 +420,4 @@ void Adafruit_GrayOLED::setContrast(uint8_t level) {
 }
 
 #endif /* ATTIN85 not supported */
+#endif
