@@ -20,6 +20,7 @@
 #ifndef _ADAFRUIT_SPITFT_H_
 #define _ADAFRUIT_SPITFT_H_
 
+#if __Adafruit_GFX_Include_Hardware__
 #if !defined(__AVR_ATtiny85__) // Not for ATtiny, at all
 
 #include "Adafruit_GFX.h"
@@ -527,4 +528,5 @@ protected:
 };
 
 #endif // end __AVR_ATtiny85__
+#endif
 #endif // end _ADAFRUIT_SPITFT_H_

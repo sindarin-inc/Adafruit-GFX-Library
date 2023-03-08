@@ -32,6 +32,9 @@ POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "Adafruit_GFX.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include "glcdfont.c"
 #ifdef __AVR__
 #include <avr/pgmspace.h>
@@ -1233,6 +1236,68 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
 
   } // End classic vs custom font
 }
+
+size_t Adafruit_GFX::write(const char *str)
+{
+  if(str == NULL) {
+      return 0;
+  }
+  return write((const uint8_t *) str, strlen(str));
+}
+
+size_t Adafruit_GFX::write(const uint8_t *buffer, size_t size) {
+  size_t n = 0;
+  while(size--) {
+      n += write(*buffer++);
+  }
+  return n;
+}
+
+size_t Adafruit_GFX::print(const char* str) {
+  return write(str);
+}
+
+size_t Adafruit_GFX::println(const char* str) {
+  size_t n = print(str);
+  n += println();
+  return n;
+}
+
+size_t Adafruit_GFX::println(void)
+{
+  return print("\r\n");
+}
+
+size_t Adafruit_GFX::printf(const char *format, ...)
+{
+    char loc_buf[64];
+    char * temp = loc_buf;
+    va_list arg;
+    va_list copy;
+    va_start(arg, format);
+    va_copy(copy, arg);
+    int len = vsnprintf(temp, sizeof(loc_buf), format, copy);
+    va_end(copy);
+    if(len < 0) {
+        va_end(arg);
+        return 0;
+    };
+    if(len >= sizeof(loc_buf)){
+        temp = (char*) malloc(len+1);
+        if(temp == NULL) {
+            va_end(arg);
+            return 0;
+        }
+        len = vsnprintf(temp, len+1, format, arg);
+    }
+    va_end(arg);
+    len = write((uint8_t*)temp, len);
+    if(temp != loc_buf){
+        free(temp);
+    }
+    return len;
+}
+
 /**************************************************************************/
 /*!
     @brief  Print one byte/character of data, used to support print()
@@ -1486,6 +1551,7 @@ void Adafruit_GFX::getTextBounds(const char *str, int16_t x, int16_t y,
     @param    h      The boundary height, set by function
 */
 /**************************************************************************/
+/*
 void Adafruit_GFX::getTextBounds(const String &str, int16_t x, int16_t y,
                                  int16_t *x1, int16_t *y1, uint16_t *w,
                                  uint16_t *h) {
@@ -1493,6 +1559,7 @@ void Adafruit_GFX::getTextBounds(const String &str, int16_t x, int16_t y,
     getTextBounds(const_cast<char *>(str.c_str()), x, y, x1, y1, w, h);
   }
 }
+*/
 
 /**************************************************************************/
 /*!
@@ -1507,6 +1574,7 @@ void Adafruit_GFX::getTextBounds(const String &str, int16_t x, int16_t y,
     @param    h      The boundary height, set by function
 */
 /**************************************************************************/
+/*
 void Adafruit_GFX::getTextBounds(const __FlashStringHelper *str, int16_t x,
                                  int16_t y, int16_t *x1, int16_t *y1,
                                  uint16_t *w, uint16_t *h) {
@@ -1530,6 +1598,7 @@ void Adafruit_GFX::getTextBounds(const __FlashStringHelper *str, int16_t x,
     *h = maxy - miny + 1;
   }
 }
+*/
 
 /**************************************************************************/
 /*!
@@ -1673,6 +1742,7 @@ void Adafruit_GFX_Button::initButtonUL(Adafruit_GFX *gfx, int16_t x1,
 */
 /**************************************************************************/
 void Adafruit_GFX_Button::drawButton(bool inverted) {
+  /*
   uint16_t fill, outline, text;
 
   if (!inverted) {
@@ -1694,6 +1764,7 @@ void Adafruit_GFX_Button::drawButton(bool inverted) {
   _gfx->setTextColor(text);
   _gfx->setTextSize(_textsize_x, _textsize_y);
   _gfx->print(_label);
+  */
 }
 
 /**************************************************************************/

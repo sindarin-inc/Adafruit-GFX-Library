@@ -2,20 +2,26 @@
 #define _ADAFRUIT_GFX_H
 
 #if ARDUINO >= 100
-#include "Arduino.h"
-#include "Print.h"
+//#include "Arduino.h"
+//#include "Print.h"
+#include <stdint.h>
+#include <string.h>
 #else
-#include "WProgram.h"
+//#include "WProgram.h"
+#include <stdint.h>
+#include <string.h>
 #endif
 #include "gfxfont.h"
 
+#if __Adafruit_GFX_Include_Hardware__
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_SPIDevice.h>
+#endif
 
 /// A generic graphics superclass that can handle all sorts of drawing. At a
 /// minimum you can subclass and provide drawPixel(). At a maximum you can do a
 /// ton of overriding to optimize. Used for any/all Adafruit displays!
-class Adafruit_GFX : public Print {
+class Adafruit_GFX {
 
 public:
   Adafruit_GFX(int16_t w, int16_t h); // Constructor
@@ -113,10 +119,10 @@ public:
                 uint16_t bg, uint8_t size_x, uint8_t size_y);
   void getTextBounds(const char *string, int16_t x, int16_t y, int16_t *x1,
                      int16_t *y1, uint16_t *w, uint16_t *h);
-  void getTextBounds(const __FlashStringHelper *s, int16_t x, int16_t y,
-                     int16_t *x1, int16_t *y1, uint16_t *w, uint16_t *h);
-  void getTextBounds(const String &str, int16_t x, int16_t y, int16_t *x1,
-                     int16_t *y1, uint16_t *w, uint16_t *h);
+  //void getTextBounds(const __FlashStringHelper *s, int16_t x, int16_t y,
+  //                   int16_t *x1, int16_t *y1, uint16_t *w, uint16_t *h);
+  //void getTextBounds(const String &str, int16_t x, int16_t y, int16_t *x1,
+  //                   int16_t *y1, uint16_t *w, uint16_t *h);
   void setTextSize(uint8_t s);
   void setTextSize(uint8_t sx, uint8_t sy);
   void setFont(const GFXfont *f = NULL);
@@ -180,13 +186,20 @@ public:
   /**********************************************************************/
   void cp437(bool x = true) { _cp437 = x; }
 
-  using Print::write;
+  //using Print::write;
 #if ARDUINO >= 100
-  virtual size_t write(uint8_t);
+  //virtual size_t write(uint8_t);
 #else
-  virtual void write(uint8_t);
+  //void write(uint8_t);
 #endif
 
+  size_t write(uint8_t ch);
+  size_t write(const char* str);
+  size_t write(const uint8_t *buffer, size_t size);
+  size_t print(const char* str);
+  size_t println(const char* str);
+  size_t println(void);
+  size_t printf(const char* format, ...);
   /************************************************************************/
   /*!
     @brief      Get width of the display, accounting for current rotation
